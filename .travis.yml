@@ -32,3 +32,15 @@ jobs:
       script:
         - npm run lint
         - npm run build
+    - stage: test
+      node_js:
+        - '12'
+        - '10'
+        - '9'
+      before_script:
+        - npm prune
+      script:
+        - npm run test:cov
+        - npm run test:e2e
+      after_success:
+        - npm run report-coverage
