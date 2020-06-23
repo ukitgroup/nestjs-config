@@ -1,0 +1,46 @@
+sudo: false
+language: node_js
+
+cache:
+  directories:
+    - node_modules
+
+notifications:
+  email:
+    recipients:
+      - goodluckhf@yandex.ru
+    on_success: never
+    on_failure: always
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
+
+stages:
+  - lints
+  - test
+  - name: release
+    if: branch = master
+jobs:
+  include:
+    - stage: lints
+      name: 'linting and type checking'
+      node_js:
+        - '10'
+      before_script:
+        - npm prune
+      script:
+        - npm run lint
+        - npm run build
+    - stage: test
+      node_js:
+        - '12'
+        - '10'
+        - '9'
+      before_script:
+        - npm prune
+      script:
+        - npm run test:cov
+        - npm run test:e2e
+      after_success:
+        - npm run report-coverage
