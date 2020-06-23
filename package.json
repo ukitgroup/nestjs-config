@@ -17,10 +17,15 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
     "typescript": "^3.9.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ignore-path .gitignore \"**/*.{js,ts}\"",
+    "precommit": "lint-staged",
+    "build": "tsc --skipLibCheck -p tsconfig.build.json",
+    "prebuild": "rimraf ./dist"
   },
   "repository": {
     "type": "git",
