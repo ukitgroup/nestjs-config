@@ -1,0 +1,23 @@
+{
+  "name": "@ukitgroup/nestjs-config",
+  "version": "1.0.0",
+  "description": "modular config with type casting and validation out of the box",
+  "main": "index.js",
+  "dependencies": {
+
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ukitgroup/nestjs-config.git"
+  },
+  "author": "Goodluckhf <Goodluckhf@yandex.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ukitgroup/nestjs-config/issues"
+  },
+  "homepage": "https://github.com/ukitgroup/nestjs-config#readme"
+}
