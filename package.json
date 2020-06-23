@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "@commitlint/cli": "^9.0.1",
+    "@commitlint/config-conventional": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
     "eslint": "^7.3.1",
@@ -12,6 +14,8 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "typescript": "^3.9.5"
   },
@@ -27,5 +31,17 @@
   "bugs": {
     "url": "https://github.com/ukitgroup/nestjs-config/issues"
   },
-  "homepage": "https://github.com/ukitgroup/nestjs-config#readme"
+  "homepage": "https://github.com/ukitgroup/nestjs-config#readme",
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix --ignore-path .gitignore",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
 }
