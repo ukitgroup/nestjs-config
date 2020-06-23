@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "modular config with type casting and validation out of the box",
   "main": "index.js",
-  "dependencies": {
-
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^2.0.5"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
