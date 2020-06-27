@@ -1,1 +1,2 @@
-export const index = {};
+export * from './decorator';
+export * from './module';
