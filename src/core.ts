@@ -17,7 +17,7 @@ export function init(options): void {
 }
 
 export function make(ConfigClass): typeof ConfigClass.prototype {
-  const name = ConfigClass[Symbol.for('name')];
+  const name = ConfigClass[Symbol.for('name')] || ConfigClass.name;
   if (!config[name]) return new ConfigClass();
 
   const moduleConfig = plainToClass(ConfigClass, config[name]);
