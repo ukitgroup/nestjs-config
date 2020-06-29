@@ -1,6 +1,6 @@
 import { Expose } from '@ukitgroup/class-transformer';
 
-export function ModuleConfig(name: string): (target) => void {
+export function Config(name: string): (target) => void {
   return (target): void => {
     // eslint-disable-next-line no-param-reassign
     target[Symbol.for('name')] = name;
