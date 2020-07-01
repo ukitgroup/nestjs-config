@@ -1,12 +1,13 @@
-import { Expose } from '@ukitgroup/class-transformer';
+import { Expose } from './transformer';
+import { ENV_CONFIG_NAME_SYMBOL } from './symbols';
 
-export function Config(name: string): (target) => void {
-  return (target): void => {
+export function Config(name: string): ClassDecorator {
+  return (target: Function): void => {
     // eslint-disable-next-line no-param-reassign
-    target[Symbol.for('name')] = name;
+    target[ENV_CONFIG_NAME_SYMBOL] = name;
   };
 }
 
-export function Env(name: string): (target, propertyName?: string) => void {
+export function Env(name: string): PropertyDecorator {
   return Expose({ name });
 }

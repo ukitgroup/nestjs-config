@@ -1,22 +1,39 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
+import { ConfigClass, ConfigOptions } from './options';
 import * as core from './core';
 
 @Module({})
 export class ConfigModule {
-  static forRoot(options): DynamicModule {
+  static forRoot(options: ConfigOptions): DynamicModule {
     core.init(options);
-    return { module: ConfigModule };
-  }
 
-  static forFeature(ConfigClass): DynamicModule {
-    const provider = {
-      provide: ConfigClass,
-      useFactory: () => core.make(ConfigClass),
-    };
+    let providers: Provider[] = [];
+    if (options.configs) {
+      providers = options.configs.map(
+        (configClass: ConfigClass): Provider => ({
+          provide: configClass,
+          useFactory: () => core.make(configClass),
+        }),
+      );
+    }
     return {
       module: ConfigModule,
-      providers: [provider],
-      exports: [provider],
+      providers,
+      exports: providers,
+    };
+  }
+
+  static forFeature(configClasses: ConfigClass[]): DynamicModule {
+    const providers: Provider[] = configClasses.map(
+      (configClass: ConfigClass): Provider => ({
+        provide: configClass,
+        useFactory: () => core.make(configClass),
+      }),
+    );
+    return {
+      module: ConfigModule,
+      providers,
+      exports: providers,
     };
   }
 }
