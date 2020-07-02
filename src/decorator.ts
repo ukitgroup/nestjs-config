@@ -1,5 +1,5 @@
 import { Expose } from './transformer';
-import { ENV_CONFIG_NAME_SYMBOL } from './symbols';
+import { ENV_CONFIG_NAME_SYMBOL } from './lib/symbols';
 
 export function Config(name: string): ClassDecorator {
   return (target: Function): void => {

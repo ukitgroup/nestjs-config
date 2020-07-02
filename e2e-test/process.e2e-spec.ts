@@ -23,7 +23,7 @@ describe('Process', () => {
     });
 
     @Module({
-      imports: [ConfigModule.forRoot({ fromProcess: true }), TestModule],
+      imports: [ConfigModule.forRoot({}), TestModule],
     })
     class AppModule {}
 

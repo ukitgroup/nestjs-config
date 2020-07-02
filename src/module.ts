@@ -1,21 +1,27 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { ConfigClass, ConfigOptions } from './options';
-import * as core from './core';
+import { ConfigOptions } from './options';
+import { ConfigFacade } from './lib/facade';
+import { ClassType } from './lib/types';
+
+const configFacade = new ConfigFacade();
 
 @Module({})
 export class ConfigModule {
   static forRoot(options: ConfigOptions): DynamicModule {
-    core.init(options);
+    configFacade.initialize(options);
 
     let providers: Provider[] = [];
     if (options.configs) {
       providers = options.configs.map(
-        (configClass: ConfigClass): Provider => ({
-          provide: configClass,
-          useFactory: () => core.make(configClass),
+        (ConfigClass: ClassType): Provider => ({
+          provide: ConfigClass,
+          useFactory: (): typeof ConfigClass.prototype => {
+            return configFacade.createConfig(ConfigClass);
+          },
         }),
       );
     }
+
     return {
       module: ConfigModule,
       providers,
@@ -23,13 +29,16 @@ export class ConfigModule {
     };
   }
 
-  static forFeature(configClasses: ConfigClass[]): DynamicModule {
-    const providers: Provider[] = configClasses.map(
-      (configClass: ConfigClass): Provider => ({
-        provide: configClass,
-        useFactory: () => core.make(configClass),
+  static forFeature(ConfigClasses: ClassType[]): DynamicModule {
+    const providers: Provider[] = ConfigClasses.map(
+      (ConfigClass: ClassType): Provider => ({
+        provide: ConfigClass,
+        useFactory: (): typeof ConfigClass.prototype => {
+          return configFacade.createConfig(ConfigClass);
+        },
       }),
     );
+
     return {
       module: ConfigModule,
       providers,

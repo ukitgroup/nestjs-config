@@ -1,10 +1,7 @@
-export type ConfigClass = {
-  new (): Object;
-};
+import { ClassType } from './lib/types';
 
 export type ConfigOptions = {
-  fromProcess?: boolean;
   fromFile?: string;
 
-  configs?: ConfigClass[];
+  configs?: ClassType[];
 };
