@@ -6,13 +6,12 @@ import { ConfigValidator } from './validator';
 import { ConfigOptions } from '../options';
 
 export class ConfigFacade {
-  private readonly configExtractor = new ConfigExtractor();
-
-  private readonly configParser = new ConfigParser();
-
-  private readonly configFactory = new ConfigFactory();
-
-  private readonly configValidator = new ConfigValidator();
+  constructor(
+    private readonly configExtractor: ConfigExtractor,
+    private readonly configParser: ConfigParser,
+    private readonly configFactory: ConfigFactory,
+    private readonly configValidator: ConfigValidator,
+  ) {}
 
   private configStorage: ConfigStorage;
 

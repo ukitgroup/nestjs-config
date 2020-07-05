@@ -3,13 +3,9 @@ import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigModule } from '../src';
 import { TestConfig } from './fixtures/test.config';
+import { TestModule } from './fixtures/test.module';
 
 describe('Process', () => {
-  @Module({
-    imports: [ConfigModule.forFeature([TestConfig])],
-  })
-  class TestModule {}
-
   it('override', async () => {
     Object.assign(process.env, {
       TEST__STRING_VAR: 'stringVar',

@@ -5,13 +5,9 @@ import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigModule } from '../src';
 import { TestConfig } from './fixtures/test.config';
+import { TestModule } from './fixtures/test.module';
 
 describe('File', () => {
-  @Module({
-    imports: [ConfigModule.forFeature([TestConfig])],
-  })
-  class TestModule {}
-
   it('override from file', async () => {
     const envFilePath = path.join(
       __dirname,

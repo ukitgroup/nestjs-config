@@ -2,8 +2,17 @@ import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ConfigOptions } from './options';
 import { ConfigFacade } from './lib/facade';
 import { ClassType } from './lib/types';
+import { ConfigExtractor } from './lib/extractor';
+import { ConfigParser } from './lib/parser';
+import { ConfigFactory } from './lib/factory';
+import { ConfigValidator } from './lib/validator';
 
-const configFacade = new ConfigFacade();
+const configFacade = new ConfigFacade(
+  new ConfigExtractor(),
+  new ConfigParser(),
+  new ConfigFactory(),
+  new ConfigValidator(),
+);
 
 @Module({})
 export class ConfigModule {
