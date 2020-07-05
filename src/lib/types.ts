@@ -7,7 +7,7 @@ export type ConfigStorage = {
   [name: string]:
     | string
     | {
-        [name: string]: string;
+        [name: string]: string | number | boolean;
       };
 };
 
