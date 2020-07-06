@@ -1,4 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
+import * as dotenv from 'dotenv';
 import { ConfigOptions } from './options';
 import { ConfigFacade } from './lib/facade';
 import { ClassType } from './lib/types';
@@ -8,7 +9,7 @@ import { ConfigFactory } from './lib/factory';
 import { ConfigValidator } from './lib/validator';
 
 const configFacade = new ConfigFacade(
-  new ConfigExtractor(),
+  new ConfigExtractor(dotenv.config),
   new ConfigParser(),
   new ConfigFactory(),
   new ConfigValidator(),
