@@ -5,10 +5,12 @@ import { Boolean, Integer, Number, String } from '../types';
 describe('ConfigValidator', () => {
   const configValidator = new ConfigValidator();
 
+  const configName = 'TestConfig';
+  const envConfigName = 'TEST';
+  const variableName = 'variable';
+  const envVariableName = 'VARIABLE';
+
   describe('String', () => {
-    const envConfigName = 'TEST';
-    const variableName = 'variable';
-    const envVariableName = 'VARIABLE';
     const value = 'value';
 
     @Config(envConfigName)
@@ -20,10 +22,14 @@ describe('ConfigValidator', () => {
 
     it('should throw error', () => {
       const testConfig = new TestConfig();
+
+      const badValue = 5;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      testConfig[variableName] = 5;
-      expect(() => configValidator.validate(testConfig)).toThrowError();
+      testConfig[variableName] = badValue;
+      expect(() => configValidator.validate(testConfig)).toThrowError(
+        `${configName}.${variableName} received \`${badValue}\` errors: {"isString":"variable must be a string"}`,
+      );
     });
 
     it('should return nothing', () => {
@@ -32,9 +38,6 @@ describe('ConfigValidator', () => {
   });
 
   describe('Number', () => {
-    const envConfigName = 'TEST';
-    const variableName = 'variable';
-    const envVariableName = 'VARIABLE';
     const value = 0.1;
 
     @Config(envConfigName)
@@ -46,10 +49,14 @@ describe('ConfigValidator', () => {
 
     it('should throw error', () => {
       const testConfig = new TestConfig();
+
+      const badValue = 'abc';
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      testConfig[variableName] = 'abc';
-      expect(() => configValidator.validate(testConfig)).toThrowError();
+      testConfig[variableName] = badValue;
+      expect(() => configValidator.validate(testConfig)).toThrowError(
+        `${configName}.${variableName} received \`${badValue}\` errors: {"isNumber":"variable must be a number conforming to the specified constraints"}`,
+      );
     });
 
     it('should return nothing', () => {
@@ -58,9 +65,6 @@ describe('ConfigValidator', () => {
   });
 
   describe('Integer', () => {
-    const envConfigName = 'TEST';
-    const variableName = 'variable';
-    const envVariableName = 'VARIABLE';
     const value = 3;
 
     @Config(envConfigName)
@@ -72,10 +76,14 @@ describe('ConfigValidator', () => {
 
     it('should throw error', () => {
       const testConfig = new TestConfig();
+
+      const badValue = 1.1;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      testConfig[variableName] = 1.1;
-      expect(() => configValidator.validate(testConfig)).toThrowError();
+      testConfig[variableName] = badValue;
+      expect(() => configValidator.validate(testConfig)).toThrowError(
+        `${configName}.${variableName} received \`${badValue}\` errors: {"isInt":"variable must be an integer number"}`,
+      );
     });
 
     it('should return nothing', () => {
@@ -84,9 +92,6 @@ describe('ConfigValidator', () => {
   });
 
   describe('Boolean', () => {
-    const envConfigName = 'TEST';
-    const variableName = 'variable';
-    const envVariableName = 'VARIABLE';
     const value = true;
 
     @Config(envConfigName)
@@ -98,10 +103,14 @@ describe('ConfigValidator', () => {
 
     it('should throw error', () => {
       const testConfig = new TestConfig();
+
+      const badValue = 1;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      testConfig[variableName] = 1;
-      expect(() => configValidator.validate(testConfig)).toThrowError();
+      testConfig[variableName] = badValue;
+      expect(() => configValidator.validate(testConfig)).toThrowError(
+        `${configName}.${variableName} received \`${badValue}\` errors: {"isBoolean":"variable must be a boolean value"}`,
+      );
     });
 
     it('should return nothing', () => {
