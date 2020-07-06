@@ -1,8 +1,8 @@
 import { Config, Env } from '../../src';
 import { Boolean, Integer, Number, String } from '../../src/types';
 
-@Config('TEST')
-export class TestConfig {
+@Config('FIRST')
+export class FirstConfig {
   @Env('STRING_VAR')
   @String()
   stringVar: string;

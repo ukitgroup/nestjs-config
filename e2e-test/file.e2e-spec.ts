@@ -4,7 +4,8 @@ import * as fs from 'fs';
 import { Module } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigModule } from '../src';
-import { TestConfig } from './fixtures/test.config';
+import { FirstConfig } from './fixtures/first.config';
+import { SecondConfig } from './fixtures/second.config';
 import { TestModule } from './fixtures/test.module';
 
 describe('File', () => {
@@ -16,14 +17,15 @@ describe('File', () => {
     );
     fs.writeFileSync(
       envFilePath,
-      `TEST__STRING_VAR=stringVar
-      TEST__STRING_VAR_WITH_DEFAULT=stringVarWithDefault
-      TEST__INT_VAR=1
-      TEST__INT_VAR_WITH_DEFAULT=7
-      TEST__NUMBER_VAR=1.1
-      TEST__NUMBER_VAR_WITH_DEFAULT=7.7
-      TEST__BOOL_VAR=true
-      TEST__BOOL_VAR_WITH_DEFAULT=true`,
+      `FIRST__STRING_VAR=stringVar
+      FIRST__STRING_VAR_WITH_DEFAULT=stringVarWithDefault
+      FIRST__INT_VAR=1
+      FIRST__INT_VAR_WITH_DEFAULT=7
+      FIRST__NUMBER_VAR=1.1
+      FIRST__NUMBER_VAR_WITH_DEFAULT=7.7
+      FIRST__BOOL_VAR=true
+      FIRST__BOOL_VAR_WITH_DEFAULT=true
+      SECOND__VARIABLE=new`,
     );
 
     @Module({
@@ -32,8 +34,11 @@ describe('File', () => {
     class AppModule {}
 
     const app = await NestFactory.createApplicationContext(AppModule);
-    const config = app.get<TestConfig>(TestConfig);
-    expect(config).toMatchObject({
+
+    const firstConfig = app.get<FirstConfig>(FirstConfig);
+    const secondConfig = app.get<SecondConfig>(SecondConfig);
+
+    expect(firstConfig).toMatchObject({
       stringVar: 'stringVar',
       stringVarWithDefault: 'stringVarWithDefault',
       intVar: 1,
@@ -42,6 +47,9 @@ describe('File', () => {
       numberVarWithDefault: 7.7,
       boolVar: true,
       boolVarWithDefault: true,
+    });
+    expect(secondConfig).toMatchObject({
+      variable: 'new',
     });
 
     await app.close();
