@@ -3,7 +3,6 @@ import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
 import { ConfigValidator } from './validator';
-import { ConfigOptions } from '../options';
 
 export class ConfigFacade {
   constructor(
@@ -15,10 +14,8 @@ export class ConfigFacade {
 
   private configStorage: ConfigStorage;
 
-  public initialize(options: ConfigOptions): void {
-    const processEnv: ProcessEnv = this.configExtractor.extract(
-      options.fromFile,
-    );
+  public initialize(fromFile?: string): void {
+    const processEnv: ProcessEnv = this.configExtractor.extract(fromFile);
     this.configStorage = this.configParser.parse(processEnv);
   }
 

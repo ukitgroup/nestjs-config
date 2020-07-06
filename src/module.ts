@@ -18,7 +18,7 @@ const configFacade = new ConfigFacade(
 @Module({})
 export class ConfigModule {
   static forRoot(options: ConfigOptions): DynamicModule {
-    configFacade.initialize(options);
+    configFacade.initialize(options.fromFile);
 
     let providers: Provider[] = [];
     if (options.configs) {
