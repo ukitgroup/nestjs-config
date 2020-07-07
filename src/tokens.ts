@@ -1,1 +1,2 @@
 export const CONFIG_OPTIONS = 'CONFIG_OPTIONS';
+export const CONFIG_LOGGER = 'CONFIG_LOGGER';

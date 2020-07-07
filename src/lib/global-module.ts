@@ -1,4 +1,15 @@
-import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
+import {
+  ClassProvider,
+  DynamicModule,
+  ExistingProvider,
+  FactoryProvider,
+  Global,
+  LoggerService,
+  Module,
+  ValueProvider,
+} from '@nestjs/common';
+import { Type } from '@nestjs/common/interfaces/type.interface';
+import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
 import * as dotenv from 'dotenv';
 import { ConfigOptions } from '../options';
 import { ConfigFacade } from './facade';
@@ -6,7 +17,7 @@ import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
 import { ConfigValidator } from './validator';
-import { CONFIG_OPTIONS } from '../tokens';
+import { CONFIG_LOGGER, CONFIG_OPTIONS } from '../tokens';
 
 @Global()
 @Module({
@@ -31,32 +42,58 @@ import { CONFIG_OPTIONS } from '../tokens';
 })
 export class ConfigGlobalModule {
   static forRoot(options: ConfigOptions): DynamicModule {
-    const providers: Provider[] = [
-      {
-        provide: CONFIG_OPTIONS,
-        useValue: options,
-      },
-      {
-        provide: ConfigFacade,
-        inject: [ConfigExtractor, ConfigParser, ConfigFactory, ConfigValidator],
-        useFactory: (
-          configExtractor: ConfigExtractor,
-          configParser: ConfigParser,
-          configFactory: ConfigFactory,
-          configValidator: ConfigValidator,
-        ) =>
-          new ConfigFacade(
-            configExtractor,
-            configParser,
-            configFactory,
-            configValidator,
-            options.fromFile,
-          ),
-      },
-    ];
+    const imports: Array<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
+    > = options.imports || [];
+    const providers: Array<
+      ClassProvider | FactoryProvider | ValueProvider | ExistingProvider
+    > = options.providers || [];
+
+    if (!providers.find((provider) => provider.provide === CONFIG_LOGGER)) {
+      providers.push({
+        provide: CONFIG_LOGGER,
+        useValue: console,
+      });
+    }
+
+    providers.push(
+      ...[
+        {
+          provide: CONFIG_OPTIONS,
+          useValue: options,
+        },
+        {
+          provide: ConfigFacade,
+          inject: [
+            ConfigExtractor,
+            ConfigParser,
+            ConfigFactory,
+            ConfigValidator,
+            CONFIG_LOGGER,
+          ],
+          useFactory: (
+            configExtractor: ConfigExtractor,
+            configParser: ConfigParser,
+            configFactory: ConfigFactory,
+            configValidator: ConfigValidator,
+            logger: LoggerService,
+          ) =>
+            new ConfigFacade(
+              configExtractor,
+              configParser,
+              configFactory,
+              configValidator,
+              logger,
+              options.fromFile,
+            ),
+        },
+      ],
+    );
 
     return {
       module: ConfigGlobalModule,
+      imports,
       providers,
       exports: providers,
     };

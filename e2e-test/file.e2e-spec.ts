@@ -7,6 +7,7 @@ import { ConfigModule } from '../src';
 import { FirstConfig } from './fixtures/first.config';
 import { SecondConfig } from './fixtures/second.config';
 import { TestModule } from './fixtures/test.module';
+import { CONFIG_LOGGER } from '../src/tokens';
 
 describe('File', () => {
   it('override from file', async () => {
@@ -29,7 +30,18 @@ describe('File', () => {
     );
 
     @Module({
-      imports: [ConfigModule.forRoot({ fromFile: envFilePath }), TestModule],
+      imports: [
+        ConfigModule.forRoot({
+          fromFile: envFilePath,
+          providers: [
+            {
+              provide: CONFIG_LOGGER,
+              useValue: console,
+            },
+          ],
+        }),
+        TestModule,
+      ],
     })
     class AppModule {}
 
