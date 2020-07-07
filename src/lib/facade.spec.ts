@@ -8,13 +8,6 @@ describe('ConfigFacade', () => {
   const configFactory = { createConfig: jest.fn() };
   const configValidator = { validate: jest.fn() };
 
-  const configFacade = new ConfigFacade(
-    (configExtractor as unknown) as ConfigExtractor,
-    configParser,
-    configFactory,
-    configValidator,
-  );
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -38,7 +31,13 @@ describe('ConfigFacade', () => {
     configParser.parse.mockReturnValueOnce(configStorage);
     configFactory.createConfig.mockReturnValueOnce(new TestConfig());
 
-    configFacade.initialize();
+    const configFacade = new ConfigFacade(
+      (configExtractor as unknown) as ConfigExtractor,
+      configParser,
+      configFactory,
+      configValidator,
+      undefined,
+    );
 
     expect(configFacade.createConfig(TestConfig)).toMatchObject(expectedConfig);
 
