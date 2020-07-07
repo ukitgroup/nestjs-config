@@ -12,9 +12,7 @@ export class ConfigParser {
           return;
         }
         const moduleName = split[0];
-        if (!configStorage[moduleName]) {
-          configStorage[moduleName] = {};
-        }
+        configStorage[moduleName] = configStorage[moduleName] || {};
         configStorage[moduleName][split[1]] = value;
       },
     );

@@ -87,7 +87,8 @@
       "/node_modules/",
       "main.ts",
       ".module.ts",
-      "index.ts"
+      "index.ts",
+      "tokens.ts"
     ],
     "testEnvironment": "node",
     "globals": {
