@@ -1,9 +1,4 @@
-import {
-  ClassProvider,
-  ExistingProvider,
-  FactoryProvider,
-  ValueProvider,
-} from '@nestjs/common';
+import { Provider } from '@nestjs/common';
 import { Type } from '@nestjs/common/interfaces/type.interface';
 import { DynamicModule } from '@nestjs/common/interfaces/modules/dynamic-module.interface';
 import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
@@ -18,7 +13,5 @@ export type ConfigOptions = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
   >;
-  providers?: Array<
-    ClassProvider | FactoryProvider | ValueProvider | ExistingProvider
-  >;
+  providers?: Provider[];
 };

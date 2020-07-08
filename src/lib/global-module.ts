@@ -1,12 +1,9 @@
 import {
-  ClassProvider,
   DynamicModule,
-  ExistingProvider,
-  FactoryProvider,
   Global,
   LoggerService,
   Module,
-  ValueProvider,
+  Provider,
 } from '@nestjs/common';
 import { Type } from '@nestjs/common/interfaces/type.interface';
 import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
@@ -47,10 +44,18 @@ export class ConfigGlobalModule {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference
     > = options.imports || [];
-    const providers: Array<
-      ClassProvider | FactoryProvider | ValueProvider | ExistingProvider
-    > = options.providers || [];
+    const providers: Provider[] = options.providers || [];
 
+    imports.forEach((module) => {
+      if (!module) throw new Error(`Wrong import parameter \`${module}\``);
+    });
+    providers.forEach((provider) => {
+      if (!provider)
+        throw new Error(`Wrong provider parameter \`${provider}\``);
+    });
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (!providers.find((provider) => provider.provide === CONFIG_LOGGER)) {
       providers.push({
         provide: CONFIG_LOGGER,
