@@ -18,6 +18,7 @@ import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
 import { ConfigValidator } from './validator';
 import { CONFIG_LOGGER, CONFIG_OPTIONS } from '../tokens';
+import { ConfigLogger } from './logger';
 
 @Global()
 @Module({
@@ -53,42 +54,40 @@ export class ConfigGlobalModule {
     if (!providers.find((provider) => provider.provide === CONFIG_LOGGER)) {
       providers.push({
         provide: CONFIG_LOGGER,
-        useValue: console,
+        useClass: ConfigLogger,
       });
     }
 
     providers.push(
-      ...[
-        {
-          provide: CONFIG_OPTIONS,
-          useValue: options,
-        },
-        {
-          provide: ConfigFacade,
-          inject: [
-            ConfigExtractor,
-            ConfigParser,
-            ConfigFactory,
-            ConfigValidator,
-            CONFIG_LOGGER,
-          ],
-          useFactory: (
-            configExtractor: ConfigExtractor,
-            configParser: ConfigParser,
-            configFactory: ConfigFactory,
-            configValidator: ConfigValidator,
-            logger: LoggerService,
-          ) =>
-            new ConfigFacade(
-              configExtractor,
-              configParser,
-              configFactory,
-              configValidator,
-              logger,
-              options.fromFile,
-            ),
-        },
-      ],
+      {
+        provide: CONFIG_OPTIONS,
+        useValue: options,
+      },
+      {
+        provide: ConfigFacade,
+        inject: [
+          ConfigExtractor,
+          ConfigParser,
+          ConfigFactory,
+          ConfigValidator,
+          CONFIG_LOGGER,
+        ],
+        useFactory: (
+          configExtractor: ConfigExtractor,
+          configParser: ConfigParser,
+          configFactory: ConfigFactory,
+          configValidator: ConfigValidator,
+          logger: LoggerService,
+        ) =>
+          new ConfigFacade(
+            configExtractor,
+            configParser,
+            configFactory,
+            configValidator,
+            logger,
+            options.fromFile,
+          ),
+      },
     );
 
     return {
