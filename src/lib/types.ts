@@ -12,3 +12,8 @@ export type ConfigStorage = {
 };
 
 export type ProcessEnv = NodeJS.ProcessEnv;
+
+export type ConfigSource = {
+  fromFile?: string;
+  raw?: ProcessEnv;
+};

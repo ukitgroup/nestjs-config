@@ -34,18 +34,20 @@ describe('ConfigFacade', () => {
     configParser.parse.mockReturnValueOnce(configStorage);
     configFactory.createConfig.mockReturnValueOnce(new TestConfig());
 
+    const configSource = {};
+
     const configFacade = new ConfigFacade(
       (configExtractor as unknown) as ConfigExtractor,
       configParser,
       configFactory,
       configValidator,
       (logger as unknown) as LoggerService,
-      undefined,
+      configSource,
     );
 
     expect(configFacade.createConfig(TestConfig)).toMatchObject(expectedConfig);
 
-    expect(configExtractor.extract).toHaveBeenCalledWith(undefined);
+    expect(configExtractor.extract).toHaveBeenCalledWith(configSource);
     expect(configParser.parse).toHaveBeenCalledWith(configStorage);
     expect(configFactory.createConfig).toHaveBeenCalledWith(
       configStorage,
@@ -79,18 +81,20 @@ describe('ConfigFacade', () => {
     configParser.parse.mockReturnValueOnce(configStorage);
     configFactory.createConfig.mockReturnValueOnce(expectedConfig);
 
+    const configSource = { fromFile: '.env.test' };
+
     const configFacade = new ConfigFacade(
       (configExtractor as unknown) as ConfigExtractor,
       configParser,
       configFactory,
       configValidator,
       (logger as unknown) as LoggerService,
-      undefined,
+      configSource,
     );
 
     expect(configFacade.createConfig(TestConfig)).toMatchObject(expectedConfig);
 
-    expect(configExtractor.extract).toHaveBeenCalledWith(undefined);
+    expect(configExtractor.extract).toHaveBeenCalledWith(configSource);
     expect(configParser.parse).toHaveBeenCalledWith(configStorage);
     expect(configFactory.createConfig).toHaveBeenCalledWith(
       configStorage,
@@ -130,20 +134,21 @@ describe('ConfigFacade', () => {
       throw new Error(errorMessage);
     });
 
+    const configSource = { raw: { variable: 'value' } };
     const configFacade = new ConfigFacade(
       (configExtractor as unknown) as ConfigExtractor,
       configParser,
       configFactory,
       configValidator,
       (logger as unknown) as LoggerService,
-      undefined,
+      configSource,
     );
 
     expect(() => configFacade.createConfig(TestConfig)).toThrowError(
       errorMessage,
     );
 
-    expect(configExtractor.extract).toHaveBeenCalledWith(undefined);
+    expect(configExtractor.extract).toHaveBeenCalledWith(configSource);
     expect(configParser.parse).toHaveBeenCalledWith(configStorage);
     expect(configFactory.createConfig).toHaveBeenCalledWith(
       configStorage,

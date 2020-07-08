@@ -14,8 +14,9 @@ import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
 import { ConfigValidator } from './validator';
-import { CONFIG_LOGGER, CONFIG_OPTIONS } from '../tokens';
+import { CONFIG_LOGGER, CONFIG_OPTIONS, RAW_CONFIG } from '../tokens';
 import { ConfigLogger } from './logger';
+import { ProcessEnv } from './types';
 
 @Global()
 @Module({
@@ -62,6 +63,14 @@ export class ConfigGlobalModule {
         useClass: ConfigLogger,
       });
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (!providers.find((provider) => provider.provide === RAW_CONFIG)) {
+      providers.push({
+        provide: RAW_CONFIG,
+        useValue: {},
+      });
+    }
 
     providers.push(
       {
@@ -76,6 +85,7 @@ export class ConfigGlobalModule {
           ConfigFactory,
           ConfigValidator,
           CONFIG_LOGGER,
+          RAW_CONFIG,
         ],
         useFactory: (
           configExtractor: ConfigExtractor,
@@ -83,6 +93,7 @@ export class ConfigGlobalModule {
           configFactory: ConfigFactory,
           configValidator: ConfigValidator,
           logger: LoggerService,
+          raw: ProcessEnv,
         ) =>
           new ConfigFacade(
             configExtractor,
@@ -90,7 +101,7 @@ export class ConfigGlobalModule {
             configFactory,
             configValidator,
             logger,
-            options.fromFile,
+            { fromFile: options.fromFile, raw },
           ),
       },
     );

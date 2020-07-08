@@ -1,13 +1,14 @@
-import { ProcessEnv } from './types';
+import { ConfigSource, ProcessEnv } from './types';
 
 export class ConfigExtractor {
   constructor(private readonly fileConfigExtractor: Function) {}
 
-  public extract(fromFile?: string): ProcessEnv {
+  public extract(source: ConfigSource): ProcessEnv {
+    const { fromFile, raw = {} } = source;
     if (fromFile) {
       this.fileConfigExtractor({ path: fromFile });
     }
 
-    return { ...process.env };
+    return { ...process.env, ...raw };
   }
 }

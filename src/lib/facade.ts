@@ -1,5 +1,5 @@
 import { LoggerService } from '@nestjs/common';
-import { ClassType, ConfigStorage, ProcessEnv } from './types';
+import { ClassType, ConfigSource, ConfigStorage, ProcessEnv } from './types';
 import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
@@ -14,9 +14,9 @@ export class ConfigFacade {
     private readonly configFactory: ConfigFactory,
     private readonly configValidator: ConfigValidator,
     private readonly logger: LoggerService,
-    private readonly fromFile?: string,
+    private readonly source: ConfigSource,
   ) {
-    const processEnv: ProcessEnv = this.configExtractor.extract(fromFile);
+    const processEnv: ProcessEnv = this.configExtractor.extract(source);
     this.configStorage = this.configParser.parse(processEnv);
   }
 
