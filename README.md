@@ -47,6 +47,8 @@ export class AppModule {}
 
 Create class that describes configuration for application
 
+**app.config.ts**
+
 ```typescript
 import { Config, Env } from '@ukitgroup/nestjs-config';
 import { Integer } from '@ukitgroup/nestjs-config/types';
