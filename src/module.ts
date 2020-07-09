@@ -7,7 +7,7 @@ import { ConfigGlobalModule } from './lib/global-module';
 @Module({})
 export class ConfigModule {
   static forRoot(options: ConfigOptions): DynamicModule {
-    let providers: Provider[];
+    let providers: Provider[] = [];
     if (options.configs) {
       providers = options.configs.map(
         (ConfigClass: ClassType): Provider => ({
