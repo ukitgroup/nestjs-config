@@ -214,6 +214,8 @@ or on launch your application
 APP__HTTP_PORT=3000 CAT__NAME=vasya CAT__WEIGHT=5 node dist/main.js
 ```
 
+Also you can see the example on github
+
 ## API
 
 Define options for config in AppModule with:

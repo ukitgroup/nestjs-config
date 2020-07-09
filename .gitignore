@@ -105,3 +105,5 @@ Temporary Items
 dist
 
 e2e-test/fixtures/.env.test*
+
+!example/.env
