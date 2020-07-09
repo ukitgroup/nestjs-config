@@ -85,10 +85,9 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "main.ts",
-      ".module.ts",
       "index.ts",
-      "tokens.ts"
+      "tokens.ts",
+      "logger.ts"
     ],
     "testEnvironment": "node",
     "globals": {
