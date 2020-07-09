@@ -23,6 +23,55 @@ or
 yarn add @ukitgroup/nestjs-config
 ```
 
+## Short example
+
+Override configuration for particular modules from environment
+
+**.env**
+
+```text
+CAT__WEIGHT=5
+```
+
+**cat.config.ts**
+
+```typescript
+@Config('CAT')
+export class CatConfig {
+  @Env('WEIGHT')
+  @Number()
+  readonly weight: number;
+
+  @Env('KNOW_PROGRAMMING')
+  @Boolean()
+  readonly knowsProgramming: boolean = true;
+}
+```
+
+Get the cat config in a service
+
+**cat.service.ts**
+
+```typescript
+@Injectable()
+export class CatService {
+  constructor(
+    @Inject(CatConfig) private readonly config: CatConfig,
+  ) {}
+
+  meow(): string {
+    // overridden from env
+    // typeof this.config.weight === 'number'
+    // this.config.weight === 5
+
+    // default value
+    // typeof this.config.knowsProgramming === 'boolean'
+    // this.config.knowsProgramming === true
+    return `meows..`;
+  }
+}
+```
+
 ## Usage
 
 **app.module.ts**
@@ -181,14 +230,51 @@ APP__HTTP_PORT=3000 CAT__NAME=vasya CAT__WEIGHT=5 node dist/main.js
 | `@Config(name: string)`             | Add prefix to env variables                                                   |
 | `@Env(name: string)`                | Extract env with `name` to this varaible                                      |
 |                                     |                                                                               |
-| **Type decorators**                 |                                                                               |
+| **Type decorators**                 | Import from `@ukitgroup/nestjs-config/types`                                  |
 | `@String()`                         | String variable (`@IsString`)                                                 |
 | `@Number()`                         | Number variable (`parseFloat` + `@IsNumber`                                   |
 | `@Integer()`                        | Integer variable (`parseInt` + `@IsInteger`                                   |
 | `@Boolean()`                        | Boolean variable ('true','false' + @IsBool`)                                  |
-| `@Transform(transformFn: Function)` | Custom transformation                                                         |
+| `@Transform(transformFn: Function)` | Custom transformation. Import from `@ukitgroup/nestjs-config/transformer`     |
 |                                     |                                                                               |
-| **Validation decorators**           | The same as [`class-validator`](https://github.com/typestack/class-validator) |
+| **Validation decorators**           | The same as [`class-validator`](https://github.com/typestack/class-validator). Import from `@ukitgroup/nestjs-config/validator`. |
+
+## Transformation
+
+You can either use our built-in types like Integer, Boolean, etc..  
+Or transform value with your own rule with Transform:
+
+```text
+CAT__YOUR_TYPE_VARIABLE=...
+```
+
+```typescript
+@Config('CAT')
+class CatConfig {
+  @Env('YOUR_TYPE_VARIABLE')
+  @Transform(fn) // where fn is your transformation function
+  myVariable: MyType;
+}
+```
+
+We use our own version of [class-transformer](https://github.com/typestack/class-transformer): [@ukitgroup/class-transformer](https://github.com/ukitgroup/class-transformer)
+
+## Validation
+
+```text
+CAT__WEIGHT=not_a_number
+```
+
+```typescript
+@Config('CAT')
+class CatConfig {
+  @Env('WEIGHT')
+  @Number()
+  weight: number;
+}
+```
+
+Library will throw an error on launch application: `Cat.weight received 'not_a_number' errors: {"IsNumber": "Should be number"}`
 
 ## Requirements
 
