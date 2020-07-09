@@ -216,11 +216,44 @@ APP__HTTP_PORT=3000 CAT__NAME=vasya CAT__WEIGHT=5 node dist/main.js
 
 ## API
 
-`ConfigModule.forRoot(options: ConfigOptions)`
+Define options for config in AppModule with:
 
-`ConfigOptions: { fromFile?: string, configs?: ClassType[], imports?: NestModule[], providers: Provider[] }`
+```typescript
+ConfigModule.forRoot(options: ConfigOptions)
+```
 
-`ConfigModule.forFeature(configs: ClassType[])`
+```typescript
+ConfigOptions: {
+  fromFile?: string,
+  configs?: ClassType[],
+  imports?: NestModule[],
+  providers: Provider[],
+}
+```
+
+If you don't set `fromFile` option, `process.env` will be used.
+
+In addition you can provide logger to the library to log validation errors via token `CONFIG_LOGGER`.
+
+So as raw object via token `RAW_CONFIG`. You might need it in your tests:
+
+```typescript
+const moduleFixture: TestingModule = await Test.createTestingModule({
+  imports: [AppModule],
+})
+  .overrideProvider(RAW_CONFIG)
+  .useValue({
+    APP__HTTP_PORT: '3000',
+    CAT__WEIGHT: '5',
+  })
+  .compile();
+```
+
+Define configs in any module with:
+
+```typescript
+ConfigModule.forFeature(configs: ClassType[])
+```
 
 ### Decorators
 
