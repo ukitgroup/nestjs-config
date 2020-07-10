@@ -9,6 +9,7 @@ notifications:
   email:
     recipients:
       - goodluckhf@yandex.ru
+      - velmisovx@gmail.com
     on_success: never
     on_failure: always
 
@@ -26,7 +27,7 @@ jobs:
     - stage: lints
       name: 'linting and type checking'
       node_js:
-        - '10'
+        - '12'
       before_script:
         - npm prune
       script:
@@ -35,8 +36,6 @@ jobs:
     - stage: test
       node_js:
         - '12'
-        - '10'
-        - '9'
       before_script:
         - npm prune
       script:
@@ -44,3 +43,10 @@ jobs:
         - npm run test:e2e
       after_success:
         - npm run report-coverage
+    - stage: release
+      node_js: '12'
+      before_script:
+        - npm prune
+      script:
+        - npm run build
+        - npm run semantic-release

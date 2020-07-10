@@ -103,3 +103,7 @@ Temporary Items
 
 .idea
 dist
+
+e2e-test/fixtures/.env.test*
+
+!example/.env

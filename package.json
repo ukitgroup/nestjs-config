@@ -3,10 +3,22 @@
   "version": "1.0.0",
   "description": "modular config with type casting and validation out of the box",
   "main": "index.js",
-  "dependencies": {},
+  "peerDependencies": {
+    "@nestjs/common": "^7.2.0",
+    "@nestjs/core": "^7.2.0"
+  },
+  "dependencies": {
+    "@ukitgroup/class-transformer": "^1.0.1",
+    "class-validator": "^0.12.2",
+    "dotenv": "^8.2.0",
+    "reflect-metadata": "^0.1.13"
+  },
   "devDependencies": {
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
+    "@nestjs/common": "^7.2.0",
+    "@nestjs/core": "^7.2.0",
+    "@types/dotenv": "^8.2.0",
     "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
@@ -21,6 +33,7 @@
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
+    "semantic-release": "^17.1.1",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.5"
   },
@@ -32,7 +45,8 @@
     "precommit": "lint-staged",
     "build": "tsc --skipLibCheck -p tsconfig.build.json",
     "report-coverage": "cat coverage/lcov.info | coveralls",
-    "prebuild": "rimraf ./dist"
+    "prebuild": "rimraf ./dist",
+    "semantic-release": "cp ./package.json ./dist/package.json && cp ./README.md ./dist/README.md && cd ./dist && semantic-release --dry-run"
   },
   "repository": {
     "type": "git",
@@ -73,8 +87,9 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "main.ts",
-      ".module.ts"
+      "index.ts",
+      "tokens.ts",
+      "logger.ts"
     ],
     "testEnvironment": "node",
     "globals": {
@@ -83,6 +98,21 @@
           "warnOnly": true
         }
       }
+    }
+  },
+  "release": {
+    "analyzeCommits": {
+      "preset": "angular",
+      "releaseRules": [
+        {
+          "type": "refactor",
+          "release": "patch"
+        },
+        {
+          "type": "chore",
+          "release": "patch"
+        }
+      ]
     }
   }
 }
