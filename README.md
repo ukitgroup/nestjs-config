@@ -1,5 +1,19 @@
 # nestjs-config
 
+![Travis](https://img.shields.io/travis/ukitgroup/nestjs-config/master.svg?style=flat-square)
+[![Coverage Status](https://coveralls.io/repos/github/ukitgroup/nestjs-config/badge.svg?branch=master)](https://coveralls.io/github/ukitgroup/nestjs-config?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/ukitgroup/nestjs-config.svg)](https://greenkeeper.io/)
+![node](https://img.shields.io/node/v/@ukitgroup/nestjs-config.svg?style=flat-square)
+![npm](https://img.shields.io/npm/v/@ukitgroup/nestjs-config.svg?style=flat-square)
+
+![GitHub top language](https://img.shields.io/github/languages/top/ukitgroup/nestjs-config.svg?style=flat-square)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ukitgroup/nestjs-config.svg?style=flat-square)
+![David](https://img.shields.io/david/ukitgroup/nestjs-config.svg?style=flat-square)
+![David](https://img.shields.io/david/dev/ukitgroup/nestjs-config.svg?style=flat-square)
+
+![license](https://img.shields.io/github/license/Goodluckhf/IoC-container.svg?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/Goodluckhf/IoC-container.svg?style=flat-square)
+![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)
+
 ## Description
 
 ### Convenient modular config for [`nest`](https://github.com/nestjs/nest) applications
@@ -55,9 +69,7 @@ Get the cat config in a service
 ```typescript
 @Injectable()
 export class CatService {
-  constructor(
-    @Inject(CatConfig) private readonly config: CatConfig,
-  ) {}
+  constructor(@Inject(CatConfig) private readonly config: CatConfig) {}
 
   meow(): string {
     // overridden from env
@@ -154,7 +166,7 @@ export class CatConfig {
   readonly knowsProgramming: boolean = true;
 
   @Env('BIRTH_DATE')
-  @Transform(value => new Date(value))
+  @Transform((value) => new Date(value))
   @IsOptional()
   @IsDate()
   readonly birthDate: Date;
@@ -168,8 +180,8 @@ Inject `CatConfig` for `CatModule`
 ```typescript
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@ukitgroup/nestjs-config';
-import { CatConfig } from "./cat.config";
-import { CatsService } from "./cats.service";
+import { CatConfig } from './cat.config';
+import { CatsService } from './cats.service';
 
 @Module({
   imports: [ConfigModule.forFeature([CatConfig])],
@@ -188,9 +200,7 @@ import { CatConfig } from './cat.config';
 
 @Injectable()
 export class CatService {
-  constructor(
-    @Inject(CatConfig) private readonly config: CatConfig,
-  ) {}
+  constructor(@Inject(CatConfig) private readonly config: CatConfig) {}
 
   meow(): string {
     return `${this.config.name} meows..`;
@@ -259,19 +269,19 @@ ConfigModule.forFeature(configs: ClassType[])
 
 ### Decorators
 
-| Decorator                           | Description                                                                   |
-|-------------------------------------|-------------------------------------------------------------------------------|
-| **Common config decorators**        |                                                                               |
-| `@Config(name: string)`             | Add prefix to env variables                                                   |
-| `@Env(name: string)`                | Extract env with `name` to this varaible                                      |
-|                                     |                                                                               |
-| **Type decorators**                 | Import from `@ukitgroup/nestjs-config/types`                                  |
-| `@String()`                         | String variable (`@IsString`)                                                 |
-| `@Number()`                         | Number variable (`parseFloat` + `@IsNumber`                                   |
-| `@Integer()`                        | Integer variable (`parseInt` + `@IsInteger`                                   |
-| `@Boolean()`                        | Boolean variable ('true','false' + @IsBool`)                                  |
-| `@Transform(transformFn: Function)` | Custom transformation. Import from `@ukitgroup/nestjs-config/transformer`     |
-|                                     |                                                                               |
+| Decorator                           | Description                                                                                                                      |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Common config decorators**        |                                                                                                                                  |
+| `@Config(name: string)`             | Add prefix to env variables                                                                                                      |
+| `@Env(name: string)`                | Extract env with `name` to this varaible                                                                                         |
+|                                     |                                                                                                                                  |
+| **Type decorators**                 | Import from `@ukitgroup/nestjs-config/types`                                                                                     |
+| `@String()`                         | String variable (`@IsString`)                                                                                                    |
+| `@Number()`                         | Number variable (`parseFloat` + `@IsNumber`                                                                                      |
+| `@Integer()`                        | Integer variable (`parseInt` + `@IsInteger`                                                                                      |
+| `@Boolean()`                        | Boolean variable ('true','false' + @IsBool`)                                                                                     |
+| `@Transform(transformFn: Function)` | Custom transformation. Import from `@ukitgroup/nestjs-config/transformer`                                                        |
+|                                     |                                                                                                                                  |
 | **Validation decorators**           | The same as [`class-validator`](https://github.com/typestack/class-validator). Import from `@ukitgroup/nestjs-config/validator`. |
 
 ## Transformation
