@@ -4,12 +4,12 @@
 
 ### Convenient modular config for [`nest`](https://github.com/nestjs/nest) applications
 
-1. Type casting (everything in `environment` is string) E.g. 'true' -> boolean ...
-2. runtime validation
-3. compatible with `typescript` you will have typed configs
-4. modularity - you can define configs for every module in you project
-5. get variables from environment variables by design
-6. Convenient configs definition with [`class-transformer`](https://github.com/typestack/class-transformer)/[`class-validator`](https://github.com/typestack/class-validator)
+- type casting (everything in `environment` is string) E.g. 'true' -> boolean ...
+- runtime validation
+- compatible with `typescript` you will have typed configs
+- modularity - you can define configs for every module in you project
+- get configs from environment variables by design
+- convenient config definition with [`class-transformer`](https://github.com/ukitgroup/class-transformer)/[`class-validator`](https://github.com/typestack/class-validator)
 
 ## Installation
 
