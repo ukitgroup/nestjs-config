@@ -45,7 +45,8 @@
     "precommit": "lint-staged",
     "build": "tsc --skipLibCheck -p tsconfig.build.json",
     "report-coverage": "cat coverage/lcov.info | coveralls",
-    "prebuild": "rimraf ./dist"
+    "prebuild": "rimraf ./dist",
+    "semantic-release": "cp ./package.json ./dist/package.json && cp ./README.md ./dist/README.md && cd ./dist && semantic-release --dry-run"
   },
   "repository": {
     "type": "git",
