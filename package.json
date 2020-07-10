@@ -33,6 +33,7 @@
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
+    "semantic-release": "^17.1.1",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.5"
   },
@@ -96,6 +97,21 @@
           "warnOnly": true
         }
       }
+    }
+  },
+  "release": {
+    "analyzeCommits": {
+      "preset": "angular",
+      "releaseRules": [
+        {
+          "type": "refactor",
+          "release": "patch"
+        },
+        {
+          "type": "chore",
+          "release": "patch"
+        }
+      ]
     }
   }
 }
