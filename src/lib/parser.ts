@@ -13,7 +13,8 @@ export class ConfigParser {
         }
         const moduleName = split[0];
         configStorage[moduleName] = configStorage[moduleName] || {};
-        configStorage[moduleName][split[1]] = value;
+        // interpret empty string as undefined
+        configStorage[moduleName][split[1]] = value || undefined;
       },
     );
     return configStorage;
