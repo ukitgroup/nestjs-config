@@ -305,6 +305,8 @@ class CatConfig {
 
 We use our own version of [class-transformer](https://github.com/typestack/class-transformer): [@ukitgroup/class-transformer](https://github.com/ukitgroup/class-transformer)
 
+If environment variable is empty or not provided, config will use default value.
+
 ## Validation
 
 ```text
