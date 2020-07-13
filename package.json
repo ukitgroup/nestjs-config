@@ -58,6 +58,18 @@
     "url": "https://github.com/ukitgroup/nestjs-config/issues"
   },
   "homepage": "https://github.com/ukitgroup/nestjs-config#readme",
+  "keywords": [
+    "nestjs",
+    "config",
+    "env",
+    "variables",
+    "type",
+    "validate",
+    "transform"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "lint-staged": {
     "*.{js,ts}": [
       "eslint --fix --ignore-path .gitignore",
@@ -110,6 +122,10 @@
         },
         {
           "type": "chore",
+          "release": "patch"
+        },
+        {
+          "type": "docs",
           "release": "patch"
         }
       ]
