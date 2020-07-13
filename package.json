@@ -67,6 +67,9 @@
     "validate",
     "transform"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "lint-staged": {
     "*.{js,ts}": [
       "eslint --fix --ignore-path .gitignore",
