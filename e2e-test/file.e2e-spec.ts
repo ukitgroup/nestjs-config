@@ -25,7 +25,7 @@ describe('File', () => {
       FIRST__NUMBER_VAR=1.1
       FIRST__NUMBER_VAR_WITH_DEFAULT=7.7
       FIRST__BOOL_VAR=true
-      FIRST__BOOL_VAR_WITH_DEFAULT=true
+      FIRST__BOOL_VAR_WITH_DEFAULT=
       SECOND__VARIABLE=new`,
     );
 
@@ -58,7 +58,7 @@ describe('File', () => {
       numberVar: 1.1,
       numberVarWithDefault: 7.7,
       boolVar: true,
-      boolVarWithDefault: true,
+      boolVarWithDefault: false,
     });
     expect(secondConfig).toMatchObject({
       variable: 'new',

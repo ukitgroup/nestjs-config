@@ -30,4 +30,20 @@ describe('ConfigParser', () => {
       },
     });
   });
+
+  it('should return empty string value as undefined', () => {
+    const moduleName = 'SOME_MODULE';
+    const variableName = 'SOME_VARIABLE';
+    const value = '';
+
+    expect(
+      configParser.parse({
+        [`${moduleName}${ENV_MODULE_SEPARATOR}${variableName}`]: value,
+      }),
+    ).toMatchObject({
+      [moduleName]: {
+        [variableName]: undefined,
+      },
+    });
+  });
 });
