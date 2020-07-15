@@ -3,7 +3,7 @@ export declare type ClassType = {
   new (...args: any[]): {};
 };
 
-export type ConfigStorage = {
+export type ParsedConfig = {
   [name: string]:
     | string
     | {
