@@ -8,6 +8,7 @@ import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
 import { ConfigValidator } from './validator';
 import { ConfigLogger } from './logger';
+import { ConfigSource } from './types';
 
 describe('ConfigFacade', () => {
   let configStorage: ConfigStorage;
@@ -68,7 +69,7 @@ describe('ConfigFacade', () => {
     configParser.parse.mockReturnValueOnce({});
     configFactory.createConfig.mockReturnValueOnce(new TestConfig());
 
-    const configSource = {};
+    const configSource: ConfigSource = {};
 
     const configFacade = new ConfigFacade(
       configStorage,
@@ -121,7 +122,7 @@ describe('ConfigFacade', () => {
     configParser.parse.mockReturnValueOnce(parsed);
     configFactory.createConfig.mockReturnValueOnce(expectedConfig);
 
-    const configSource = { fromFile: '.env.test' };
+    const configSource: ConfigSource = { fromFile: '.env.test' };
 
     const configFacade = new ConfigFacade(
       configStorage,
@@ -180,7 +181,7 @@ describe('ConfigFacade', () => {
       throw new Error(errorMessage);
     });
 
-    const configSource = { raw: { variable: 'value' } };
+    const configSource: ConfigSource = { raw: { variable: 'value' } };
     const configFacade = new ConfigFacade(
       configStorage,
       (configExtractor as unknown) as ConfigExtractor,
@@ -227,7 +228,7 @@ describe('ConfigFacade', () => {
     configParser.parse.mockReturnValueOnce({});
     configFactory.createConfig.mockReturnValueOnce(new TestConfig());
 
-    const configSource = {};
+    const configSource: ConfigSource = {};
 
     const configFacade = new ConfigFacade(
       configStorage,
@@ -248,5 +249,72 @@ describe('ConfigFacade', () => {
     expect(configValidator.validate).not.toHaveBeenCalled();
     expect(logger.error).not.toHaveBeenCalled();
     expect(configStorageSpies.addConfig).not.toHaveBeenCalled();
+  });
+
+  it('should return all generated configs', () => {
+    const variableName = 'name';
+    const variableValue = 'value';
+
+    @Config('TEST')
+    class TestConfig1 {
+      @Env('VARIABLE')
+      [variableName] = variableValue;
+    }
+
+    @Config('TEST')
+    class TestConfig2 {
+      @Env('VARIABLE')
+      [variableName] = variableValue;
+    }
+
+    const expectedConfig = {
+      [variableName]: variableValue,
+    };
+
+    configExtractor.extract.mockReturnValueOnce({});
+    configParser.parse.mockReturnValueOnce({});
+    configFactory.createConfig.mockReturnValueOnce(new TestConfig1());
+    configFactory.createConfig.mockReturnValueOnce(new TestConfig2());
+    configFactory.createConfig.mockReturnValueOnce(new TestConfig1());
+
+    const configSource: ConfigSource = {};
+
+    const configFacade = new ConfigFacade(
+      configStorage,
+      (configExtractor as unknown) as ConfigExtractor,
+      configParser,
+      configFactory,
+      configValidator,
+      (logger as unknown) as LoggerService,
+      configSource,
+    );
+
+    configFacade.createConfig(TestConfig1);
+    configFacade.createConfig(TestConfig2);
+    configFacade.createConfig(TestConfig1);
+
+    expect(configFacade.getAllGeneratedConfigs()).toEqual({
+      [TestConfig1.name]: expectedConfig,
+      [TestConfig2.name]: expectedConfig,
+    });
+  });
+
+  it('should return raw config', () => {
+    configExtractor.extract.mockReturnValueOnce({});
+    configParser.parse.mockReturnValueOnce({});
+
+    const configSource: ConfigSource = { raw: { variable: 'value' } };
+
+    const configFacade = new ConfigFacade(
+      configStorage,
+      (configExtractor as unknown) as ConfigExtractor,
+      configParser,
+      configFactory,
+      configValidator,
+      (logger as unknown) as LoggerService,
+      configSource,
+    );
+
+    expect(configFacade.getRawConfig()).toEqual(configSource.raw);
   });
 });

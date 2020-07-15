@@ -1,5 +1,5 @@
 import { LoggerService } from '@nestjs/common';
-import { ClassType, ConfigSource } from './types';
+import { ClassType, ConfigSource, ProcessEnv } from './types';
 import { ConfigStorage } from './storage';
 import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
@@ -43,5 +43,13 @@ export class ConfigFacade {
     this.configStorage.addConfig(config);
 
     return config;
+  }
+
+  public getAllGeneratedConfigs(): { [name: string]: {} } {
+    return this.configStorage.getAllConfigs();
+  }
+
+  public getRawConfig(): ProcessEnv {
+    return this.configStorage[RAW_CONFIG];
   }
 }
