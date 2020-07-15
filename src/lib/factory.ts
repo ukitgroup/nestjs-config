@@ -1,10 +1,10 @@
-import { ClassType, ConfigStorage } from './types';
+import { ClassType, ParsedConfig } from './types';
 import { ENV_CONFIG_NAME_SYMBOL } from './symbols';
 import { plainToClass } from '../transformer';
 
 export class ConfigFactory {
   public createConfig(
-    configStorage: ConfigStorage,
+    parsedConfig: ParsedConfig,
     ConfigClass: ClassType,
   ): typeof ConfigClass.prototype {
     let name = ConfigClass[ENV_CONFIG_NAME_SYMBOL];
@@ -12,8 +12,8 @@ export class ConfigFactory {
       // TODO: warning
       name = ConfigClass.name;
     }
-    if (!configStorage[name]) return new ConfigClass();
+    if (!parsedConfig[name]) return new ConfigClass();
 
-    return plainToClass(ConfigClass, configStorage[name]);
+    return plainToClass(ConfigClass, parsedConfig[name]);
   }
 }

@@ -10,6 +10,7 @@ import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-refe
 import * as dotenv from 'dotenv';
 import { ConfigOptions } from '../options';
 import { ConfigFacade } from './facade';
+import { ConfigStorage } from './storage';
 import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
@@ -21,6 +22,10 @@ import { ProcessEnv } from './types';
 @Global()
 @Module({
   providers: [
+    {
+      provide: ConfigStorage,
+      useClass: ConfigStorage,
+    },
     {
       provide: ConfigExtractor,
       useFactory: () => new ConfigExtractor(dotenv.config),
@@ -80,6 +85,7 @@ export class ConfigGlobalModule {
       {
         provide: ConfigFacade,
         inject: [
+          ConfigStorage,
           ConfigExtractor,
           ConfigParser,
           ConfigFactory,
@@ -88,6 +94,7 @@ export class ConfigGlobalModule {
           RAW_CONFIG,
         ],
         useFactory: (
+          configStorage: ConfigStorage,
           configExtractor: ConfigExtractor,
           configParser: ConfigParser,
           configFactory: ConfigFactory,
@@ -96,6 +103,7 @@ export class ConfigGlobalModule {
           raw: ProcessEnv,
         ) =>
           new ConfigFacade(
+            configStorage,
             configExtractor,
             configParser,
             configFactory,

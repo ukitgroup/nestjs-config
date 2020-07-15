@@ -3,6 +3,7 @@ import { ConfigGlobalModule } from './global-module';
 import { ConfigOptions } from '../options';
 import { CONFIG_LOGGER, CONFIG_OPTIONS, RAW_CONFIG } from '../tokens';
 import { ConfigLogger } from './logger';
+import { ConfigStorage } from './storage';
 import { ConfigExtractor } from './extractor';
 import { ConfigParser } from './parser';
 import { ConfigFactory } from './factory';
@@ -37,6 +38,7 @@ describe('ConfigGlobalModule', () => {
       {
         provide: ConfigFacade,
         inject: [
+          ConfigStorage,
           ConfigExtractor,
           ConfigParser,
           ConfigFactory,
@@ -125,6 +127,7 @@ describe('ConfigGlobalModule', () => {
       {
         provide: ConfigFacade,
         inject: [
+          ConfigStorage,
           ConfigExtractor,
           ConfigParser,
           ConfigFactory,
