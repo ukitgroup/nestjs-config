@@ -37,11 +37,11 @@ describe('ConfigFacade', () => {
     const configSource = {};
 
     const configFacade = new ConfigFacade(
-      (configExtractor as unknown) as ConfigExtractor,
+      configExtractor as unknown as ConfigExtractor,
       configParser,
       configFactory,
       configValidator,
-      (logger as unknown) as LoggerService,
+      logger as unknown as LoggerService,
       configSource,
     );
 
@@ -84,11 +84,11 @@ describe('ConfigFacade', () => {
     const configSource = { fromFile: '.env.test' };
 
     const configFacade = new ConfigFacade(
-      (configExtractor as unknown) as ConfigExtractor,
+      configExtractor as unknown as ConfigExtractor,
       configParser,
       configFactory,
       configValidator,
-      (logger as unknown) as LoggerService,
+      logger as unknown as LoggerService,
       configSource,
     );
 
@@ -136,11 +136,11 @@ describe('ConfigFacade', () => {
 
     const configSource = { raw: { variable: 'value' } };
     const configFacade = new ConfigFacade(
-      (configExtractor as unknown) as ConfigExtractor,
+      configExtractor as unknown as ConfigExtractor,
       configParser,
       configFactory,
       configValidator,
-      (logger as unknown) as LoggerService,
+      logger as unknown as LoggerService,
       configSource,
     );
 

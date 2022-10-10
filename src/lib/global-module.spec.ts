@@ -17,9 +17,8 @@ describe('ConfigGlobalModule', () => {
 
   it('empty options', async () => {
     const options: ConfigOptions = {};
-    const configGlobalModule: DynamicModule = ConfigGlobalModule.forRoot(
-      options,
-    );
+    const configGlobalModule: DynamicModule =
+      ConfigGlobalModule.forRoot(options);
 
     const providers: Provider[] = [
       {
@@ -109,9 +108,8 @@ describe('ConfigGlobalModule', () => {
       imports: [RawTest],
       providers: [rawConfigProvider, loggerProvider],
     };
-    const configGlobalModule: DynamicModule = ConfigGlobalModule.forRoot(
-      options,
-    );
+    const configGlobalModule: DynamicModule =
+      ConfigGlobalModule.forRoot(options);
 
     const optionsProvider: Provider = {
       provide: CONFIG_OPTIONS,
