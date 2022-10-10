@@ -9,6 +9,7 @@ async function bootstrap() {
   app.getHttpServer().setTimeout(config.httpTimeout);
   await app.listen(config.httpPort);
 
+  // eslint-disable-next-line no-console
   console.debug(`Start server on http://localhost:${config.httpPort}`);
 }
 bootstrap();
