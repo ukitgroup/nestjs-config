@@ -1,6 +1,7 @@
 import { ConfigFactory } from './factory';
-import { Config, Env } from '../decorator';
+import { Config, Env, UnscopedConfig } from '../decorator';
 import { Boolean, Integer, Number, String } from '../types';
+import { UNSCOPED_CONFIG_SYMBOL } from './symbols';
 
 describe('ConfigFactory', () => {
   const configFactory = new ConfigFactory();
@@ -33,6 +34,48 @@ describe('ConfigFactory', () => {
       ).toMatchObject({
         [variableName]: newValue,
       });
+    });
+  });
+
+  describe('Unscoped config', () => {
+    const variableName = 'variable';
+    const envVariableName = 'UNSCOPED_VARIABLE';
+    const value = 'value from env';
+
+    @UnscopedConfig()
+    class TestConfig {
+      @Env(envVariableName)
+      @String()
+      [variableName]: string;
+    }
+
+    it('should return config with raw mapping without prefix', () => {
+      expect(
+        configFactory.createConfig(
+          {
+            [UNSCOPED_CONFIG_SYMBOL]: {
+              [envVariableName]: value,
+            },
+          },
+          TestConfig,
+        ),
+      ).toMatchObject({
+        [variableName]: value,
+      });
+    });
+
+    it('should return config without extraneous envs', () => {
+      expect(
+        configFactory.createConfig(
+          {
+            [UNSCOPED_CONFIG_SYMBOL]: {
+              [envVariableName]: value,
+              EXTRANEOUS_ENV: 'extraneous value',
+            },
+          },
+          TestConfig,
+        ),
+      ).not.toHaveProperty('EXTRANEOUS_ENV');
     });
   });
 

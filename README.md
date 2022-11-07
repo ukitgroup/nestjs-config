@@ -2,19 +2,13 @@
 
 ![Travis](https://img.shields.io/travis/ukitgroup/nestjs-config/master.svg?style=flat-square)
 ![Coverage Status](https://coveralls.io/repos/github/ukitgroup/nestjs-config/badge.svg?branch=master)
-![node](https://img.shields.io/node/v/@ukitgroup/nestjs-config.svg?style=flat-square)
 ![npm](https://img.shields.io/npm/v/@ukitgroup/nestjs-config.svg?style=flat-square)
 
 ![GitHub top language](https://img.shields.io/github/languages/top/ukitgroup/nestjs-config.svg?style=flat-square)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ukitgroup/nestjs-config.svg?style=flat-square)
-![David](https://img.shields.io/david/ukitgroup/nestjs-config.svg?style=flat-square)
-![David](https://img.shields.io/david/dev/ukitgroup/nestjs-config.svg?style=flat-square)
 
 ![license](https://img.shields.io/github/license/ukitgroup/nestjs-config.svg?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ukitgroup/nestjs-config.svg?style=flat-square)
-![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)
-
-## Description
 
 ### Convenient modular config for [`nestjs`](https://github.com/nestjs/nest) applications
 
@@ -93,11 +87,11 @@ ConfigModule.forRoot(options: ConfigOptions)
 ```
 
 ```typescript
-ConfigOptions: {
-  fromFile?: string,
-  configs?: ClassType[],
-  imports?: NestModule[],
-  providers?: Provider[],
+interface ConfigOptions {
+  fromFile?: string;
+  configs?: ClassType[];
+  imports?: NestModule[];
+  providers?: Provider[];
 }
 ```
 
@@ -128,20 +122,20 @@ ConfigModule.forFeature(configs: ClassType[])
 ### Decorators
 
 | Decorator                           | Description                                                                                                                      |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| **Common config decorators**        |                                                                                                                                  |
+|-------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| **Common config decorators**        | Import from `@ukitgroup/nestjs-config`                                                                                           |
 | `@Config(name: string)`             | Add prefix to env variables                                                                                                      |
-| `@Env(name: string)`                | Extract env with `name` to this varaible                                                                                         |
+| `@UnscopedConfig()`                 | For config without prefix in env variables names                                                                                 |
+| `@Env(name: string)`                | Extract env with `name` to this variable                                                                                         |
 |                                     |                                                                                                                                  |
 | **Type decorators**                 | Import from `@ukitgroup/nestjs-config/types`                                                                                     |
 | `@String()`                         | String variable (`@IsString`)                                                                                                    |
-| `@Number()`                         | Number variable (`parseFloat` + `@IsNumber`                                                                                      |
-| `@Integer()`                        | Integer variable (`parseInt` + `@IsInteger`                                                                                      |
-| `@Boolean()`                        | Boolean variable ('true','false' + @IsBool`)                                                                                     |
+| `@Number()`                         | Number variable (`parseFloat` + `@IsNumber`)                                                                                     |
+| `@Integer()`                        | Integer variable (`parseInt` + `@IsInteger`)                                                                                     |
+| `@Boolean()`                        | Boolean variable ('true', 'false' + `@IsBool`)                                                                                   |
 | `@Transform(transformFn: Function)` | Custom transformation. Import from `@ukitgroup/nestjs-config/transformer`                                                        |
 |                                     |                                                                                                                                  |
 | **Validation decorators**           | The same as [`class-validator`](https://github.com/typestack/class-validator). Import from `@ukitgroup/nestjs-config/validator`. |
-
 
 ## Usage
 
@@ -283,7 +277,24 @@ or on launch your application
 APP__HTTP_PORT=3000 CAT__NAME=vasya CAT__WEIGHT=5 node dist/main.js
 ```
 
-Also you can see the example on github
+Also you can see the [example](./e2e-test) on GitHub.
+
+## Unscoped configs
+
+> Okay, that's cool, but what if I need more flexibility in environment variables? For example, we migrate from legacy service, and we need to use old variables names (without module__ prefix).
+
+I don't think this approach is quite right, try not to use it, but... we have `@UnscopedConfig` decorator instead of `@Config` for this case. But really, try to use `@Config` decorator first 🙂
+
+For example, we have env key `LEGACY_VARIABLE`, then config will be similar to this:
+
+```typescript
+@UnscopedConfig()
+export class LegacyConfig {
+  @Env('LEGACY_VARIABLE')
+  @String()
+  readonly fieldOne: string;
+}
+```
 
 ## Transformation
 
@@ -326,8 +337,8 @@ Library will throw an error on launch application: `Cat.weight received 'not_a_n
 
 ## Requirements
 
-1. @nestjs/common ^7.2.0
-2. @nestjs/core ^7.2.0
+1. @nestjs/common >=7.2.0
+2. @nestjs/core >=7.2.0
 
 ## License
 
