@@ -24,7 +24,9 @@ describe('Process', () => {
     })
     class AppModule {}
 
-    const app = await NestFactory.createApplicationContext(AppModule);
+    const app = await NestFactory.createApplicationContext(AppModule, {
+      bufferLogs: true,
+    });
 
     const firstConfig = app.get<FirstConfig>(FirstConfig);
     const secondConfig = app.get<SecondConfig>(SecondConfig);
