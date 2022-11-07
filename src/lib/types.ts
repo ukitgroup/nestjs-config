@@ -4,7 +4,7 @@ export declare type ClassType = {
 };
 
 export type ConfigStorage = {
-  [name: string]:
+  [name: string | symbol]:
     | string
     | {
         [name: string]: string | number | boolean;
